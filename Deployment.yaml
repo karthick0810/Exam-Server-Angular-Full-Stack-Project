@@ -1,0 +1,48 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: angular
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: angular
+  template:
+    metadata:
+      labels:
+        app: angular
+    spec:
+      containers:
+      - name: angular
+        image: 754450290666.dkr.ecr.us-east-1.amazonaws.com/my-app/frontend:latest
+        ports:
+        - containerPort: 80
+        env:
+        - name: API_BASE_URL
+          value: "http://afebb05d2998b4d81aa2bcbc9bfbcaaa-1914543764.us-west-1.elb.amazonaws.com:8080"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: java
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: java
+  template:
+    metadata:
+      labels:
+        app: java
+    spec:
+      containers:
+      - name: java
+        image: 754450290666.dkr.ecr.us-east-1.amazonaws.com/my-app/backend:latest
+        ports:
+        - containerPort: 8080
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: "qa"
+        - name: CLIENT_URL
+          value: "http://aac728c45f1bf44a888c31a55dbfae17-671087227.us-west-1.elb.amazonaws.com:80"
